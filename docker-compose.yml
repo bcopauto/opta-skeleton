@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  django:
+    build:
+      context: ./django_app
+      dockerfile: Dockerfile
+    container_name: orchestrator_django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django_app:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+      - sr_parsing
+      - sr_psi_go
+
+  sr_parsing:
+    build:
+      context: ./services/sr_parsing
+      dockerfile: Dockerfile
+    container_name: sr_parsing
+    volumes:
+      - ./services/sr_parsing:/app
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env.example
+
+  sr_psi_go:
+    build:
+      context: ./services/sr_psi_go
+      dockerfile: Dockerfile
+    container_name: sr_psi_go
+    ports:
+      - "8003:8003"
+
+  postgres:
+    image: postgres:16
+    container_name: orchestrator_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: orchestrator_redis
+
+volumes:
+  postgres_data:
