@@ -25,11 +25,37 @@ services:
       dockerfile: Dockerfile
     container_name: sr_parsing
     volumes:
-      - ./services/sr_parsing:/app
+      - ./services/sr_parsing:/app/scraper_service
     ports:
       - "8001:8001"
+    shm_size: "1gb"
+    init: true
     env_file:
-      - .env.example
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sr_analysis:
+    build:
+      context: ./services/sr_analysis
+      dockerfile: Dockerfile
+    container_name: sr_analysis
+    volumes:
+      - ./services/sr_analysis:/app/analysis_service
+      - ./config:/app/config:ro
+    ports:
+      - "6969:6969"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6969/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
 
   sr_psi_go:
     build:
@@ -55,5 +81,26 @@ services:
     image: redis:7
     container_name: orchestrator_redis
 
+  mysql:
+    image: mysql:8.4
+    container_name: orchestrator_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-scraper_root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-scraper_db}
+      MYSQL_USER: ${MYSQL_USER:-scraper}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-scraper_pass}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  mysql_data:

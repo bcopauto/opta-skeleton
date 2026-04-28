@@ -1,0 +1,28 @@
+{
+  "domains": [
+    "wikipedia.org",
+    "reddit.com",
+    "bbc.com",
+    "bbc.co.uk",
+    "nytimes.com",
+    "theguardian.com",
+    "lemonde.fr",
+    "elpais.com",
+    "repubblica.it",
+    "spiegel.de",
+    "cnn.com",
+    "forbes.com",
+    "reuters.com",
+    "apnews.com",
+    "washingtonpost.com",
+    "marca.com",
+    "lequipe.fr",
+    "gazzetta.it",
+    "bild.de",
+    "espn.com",
+    "skysports.com",
+    "goal.com",
+    "transfermarkt.com"
+  ],
+  "tld_patterns": [".gov", ".edu", ".ac.uk"]
+}

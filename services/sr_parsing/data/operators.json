@@ -1,0 +1,152 @@
+[
+  {
+    "name": "bet365",
+    "domains": ["bet365.com", "bet365.es", "bet365.fr", "bet365.it", "bet365.de", "bet365.com.au", "bet365.co.uk"],
+    "aliases": ["bet 365"]
+  },
+  {
+    "name": "1xbet",
+    "domains": ["1xbet.com", "1xbet.fr", "1xbet.com.br", "1xbet.co.ke", "1xbet.ng", "1xbet.com.gh"],
+    "aliases": ["1x bet", "one x bet", "1 xbet"]
+  },
+  {
+    "name": "betway",
+    "domains": ["betway.com", "betway.co.uk", "betway.co.za", "betway.com.gh", "betway.co.ke", "betway.com.ng", "betway.es", "betway.de"],
+    "aliases": ["bet way"]
+  },
+  {
+    "name": "betano",
+    "domains": ["betano.com", "betano.pt", "betano.de", "betano.com.br", "betano.bg", "betano.ro", "betano.cl"],
+    "aliases": []
+  },
+  {
+    "name": "unibet",
+    "domains": ["unibet.com", "unibet.fr", "unibet.co.uk", "unibet.com.au", "unibet.be", "unibet.se", "unibet.dk", "unibet.de", "unibet.it"],
+    "aliases": ["uni bet"]
+  },
+  {
+    "name": "stake",
+    "domains": ["stake.com", "stake.us"],
+    "aliases": ["stake.com"]
+  },
+  {
+    "name": "fanduel",
+    "domains": ["fanduel.com"],
+    "aliases": ["fan duel"]
+  },
+  {
+    "name": "draftkings",
+    "domains": ["draftkings.com"],
+    "aliases": ["draft kings", "draftking"]
+  },
+  {
+    "name": "betclic",
+    "domains": ["betclic.com", "betclic.fr", "betclic.pt", "betclic.it", "betclic.pl"],
+    "aliases": ["bet clic"]
+  },
+  {
+    "name": "winamax",
+    "domains": ["winamax.fr", "winamax.es", "winamax.pt"],
+    "aliases": ["wina max"]
+  },
+  {
+    "name": "bwin",
+    "domains": ["bwin.com", "bwin.fr", "bwin.es", "bwin.it", "bwin.de", "bwin.co.uk", "bwin.be"],
+    "aliases": ["b win"]
+  },
+  {
+    "name": "888sport",
+    "domains": ["888sport.com", "888sport.co.uk", "888sport.it", "888sport.es", "888sport.de"],
+    "aliases": ["888 sport", "888sports"]
+  },
+  {
+    "name": "williamhill",
+    "domains": ["williamhill.com", "williamhill.co.uk", "williamhill.es", "williamhill.it", "williamhill.com.au"],
+    "aliases": ["william hill", "willhill"]
+  },
+  {
+    "name": "ladbrokes",
+    "domains": ["ladbrokes.com", "ladbrokes.co.uk", "ladbrokes.com.au", "ladbrokes.be"],
+    "aliases": ["lad brokes"]
+  },
+  {
+    "name": "paddypower",
+    "domains": ["paddypower.com", "paddypower.co.uk", "paddypower.it"],
+    "aliases": ["paddy power"]
+  },
+  {
+    "name": "pointsbet",
+    "domains": ["pointsbet.com", "pointsbet.com.au"],
+    "aliases": ["points bet"]
+  },
+  {
+    "name": "caesars",
+    "domains": ["caesars.com", "williamhill.com"],
+    "aliases": ["caesars sportsbook", "caesars sports"]
+  },
+  {
+    "name": "betmgm",
+    "domains": ["betmgm.com", "betmgm.co.uk"],
+    "aliases": ["bet mgm"]
+  },
+  {
+    "name": "betfred",
+    "domains": ["betfred.com", "betfred.co.uk"],
+    "aliases": ["bet fred"]
+  },
+  {
+    "name": "sportingbet",
+    "domains": ["sportingbet.com", "sportingbet.com.br", "sportingbet.co.za", "sportingbet.de"],
+    "aliases": ["sporting bet"]
+  },
+  {
+    "name": "pinnacle",
+    "domains": ["pinnacle.com"],
+    "aliases": ["pinnaclesports"]
+  },
+  {
+    "name": "22bet",
+    "domains": ["22bet.com", "22bet.co.ke", "22bet.com.gh", "22bet.ng", "22bet.com.br"],
+    "aliases": ["22 bet"]
+  },
+  {
+    "name": "betwinner",
+    "domains": ["betwinner.com", "betwinner.co.ke", "betwinner.com.gh", "betwinner.ng", "betwinner.com.br"],
+    "aliases": ["bet winner"]
+  },
+  {
+    "name": "melbet",
+    "domains": ["melbet.com", "melbet.co.ke", "melbet.com.br", "melbet.ng"],
+    "aliases": ["mel bet"]
+  },
+  {
+    "name": "mostbet",
+    "domains": ["mostbet.com", "mostbet.com.br", "mostbet.uz", "mostbet.az"],
+    "aliases": ["most bet"]
+  },
+  {
+    "name": "parimatch",
+    "domains": ["parimatch.com", "parimatch.co.uk", "parimatch.co.tz", "parimatch.co.ke"],
+    "aliases": ["pari match"]
+  },
+  {
+    "name": "leon",
+    "domains": ["leonbet.com", "leon.bet"],
+    "aliases": ["leonbet", "leon bet"]
+  },
+  {
+    "name": "vulkanbet",
+    "domains": ["vulkanbet.com", "vulkan.bet"],
+    "aliases": ["vulkan bet"]
+  },
+  {
+    "name": "novibet",
+    "domains": ["novibet.com", "novibet.co.uk", "novibet.gr", "novibet.ie"],
+    "aliases": ["novi bet"]
+  },
+  {
+    "name": "betsson",
+    "domains": ["betsson.com", "betsson.es", "betsson.se", "betsson.dk", "betsson.it", "betsson.com.pe", "betsson.com.co"],
+    "aliases": ["bet son"]
+  }
+]

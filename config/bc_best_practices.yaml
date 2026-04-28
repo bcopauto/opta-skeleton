@@ -1,0 +1,1414 @@
+# BC SEO Best Practices Configuration
+# Powers Layer 2 of the Content Best Practices module
+# Source: docs/bc-seo-best-practices.md
+# Last updated: 2026-03-25
+
+version: "1.0"
+
+# ---------------------------------------------------------------------------
+# Page type priority (by conversion value, 1 = highest)
+# ---------------------------------------------------------------------------
+page_type_priority:
+  code_page:
+    priority: 1
+    intent: "Transactional — user wants a code to register"
+    conversion: "Highest"
+    traffic: "Lower"
+  registration_page:
+    priority: 2
+    intent: "Transactional — user wants to sign up"
+    conversion: "High"
+    traffic: "Lower"
+  comparator_page:
+    priority: 3
+    intent: "Commercial — user is comparing operators"
+    conversion: "Good"
+    traffic: "Medium"
+  review_page:
+    priority: 4
+    intent: "Commercial — user is researching an operator"
+    conversion: "Medium"
+    traffic: "Medium"
+  app_page:
+    priority: 5
+    intent: "Commercial — user wants to download the app"
+    conversion: "Medium"
+    traffic: "Medium"
+  guide:
+    priority: 6
+    intent: "Informational — user learning about betting"
+    conversion: "Lower"
+    traffic: "Higher"
+  timely_content:
+    priority: 7
+    intent: "Informational — match predictions, tips"
+    conversion: "Low"
+    traffic: "Highest"
+  betting_overview:
+    priority: 8
+    intent: "Navigational — user browsing available operators"
+    conversion: "Medium"
+    traffic: "Medium"
+
+# ---------------------------------------------------------------------------
+# Universal rules — apply to ALL page types
+# ---------------------------------------------------------------------------
+universal_rules:
+
+  linking:
+    - rule: "Internal links must be dofollow"
+      check: "no_nofollow_internal_links"
+      priority: critical
+      detail: "All internal links on the site must be follow — never nofollow an internal link"
+
+    - rule: "Affiliate links to operator sites must be nofollow"
+      check: "affiliate_links_nofollow"
+      priority: critical
+      detail: "All go-to / CTA links to bookmaker or operator domains must be rel=nofollow"
+
+    - rule: "Links in body text pass more PageRank than sidebar/header/footer"
+      check: "prefer_body_links"
+      priority: medium
+      detail: "Topic-sensitive PageRank model — prioritize in-content links over navigational placement"
+
+    - rule: "Anchor text must contain all words of the destination page's main keyword"
+      check: "anchor_contains_target_keyword_words"
+      priority: high
+      detail: "e.g., for 'bet365 bonus code' page, anchor must include all three words in natural sentence"
+
+    - rule: "Anchors should be natural and readable, not exact-match keyword stuffing"
+      check: "anchor_is_natural"
+      priority: medium
+
+    - rule: "Links must be contextualised — surrounding paragraph topically related to destination"
+      check: "link_context_relevance"
+      priority: high
+
+    - rule: "Prefer contextualised links within sentences over standalone navigational links"
+      check: "prefer_contextual_links"
+      priority: medium
+
+    - rule: "Publish articles with internal links already included at first crawl"
+      check: "links_present_at_publish"
+      priority: high
+      detail: "Google values links present at first crawl more highly"
+
+    - rule: "No internal links in the first 3 paragraphs (except affiliate links)"
+      check: "no_internal_links_first_3_paragraphs"
+      priority: high
+      detail: "Bad UX to propose leaving the page immediately"
+
+    - rule: "Higher-priority pages should get links placed higher in the content"
+      check: "priority_pages_linked_higher"
+      priority: medium
+      detail: "Code/registration links near top; app links can be in second half"
+
+    - rule: "Each page must have at least one internal link to another page"
+      check: "has_minimum_one_internal_link"
+      priority: critical
+
+    - rule: "Anchor text naturally embedded in a sentence, not isolated keyword links"
+      check: "anchor_in_sentence_context"
+      priority: high
+      detail: "Contextual anchors within natural prose that contain the main keyword words"
+
+    - rule: "Cross-links within cocoon/bundle: code <-> registration <-> review <-> app"
+      check: "cocoon_cross_links_present"
+      priority: high
+      detail: "Flag missing cross-links between related bundle pages"
+
+  freshness:
+    - rule: "Commercial pages must be republished on the 1st of each month"
+      check: "commercial_page_monthly_republish"
+      priority: high
+      detail: "Update publication date to signal freshness — confirmed ranking signal for YMYL"
+
+    - rule: "Publication date must be recent"
+      check: "has_recent_date"
+      priority: high
+
+    - rule: "Use auto-date shortcodes for year and month"
+      check: "uses_auto_date_shortcodes"
+      priority: medium
+      detail: "Use %%currentyear%% and %%currentmonth%% shortcodes where supported"
+
+  eeat:
+    - rule: "Author byline must be present with a real author name"
+      check: "has_real_author"
+      priority: high
+      detail: "Real name, not fake/placeholder. Author should have visible expertise"
+
+    - rule: "Publication date and last-updated date must be visible"
+      check: "has_visible_dates"
+      priority: high
+
+    - rule: "About Us page must exist on the site"
+      check: "site_has_about_page"
+      priority: high
+      detail: "Site-level trust signal — checked at site level, not per-page"
+
+    - rule: "Contact page must exist on the site"
+      check: "site_has_contact_page"
+      priority: high
+
+    - rule: "Customer service information must be present"
+      check: "has_customer_service_info"
+      priority: medium
+
+    - rule: "Content must be regularly edited, reviewed, and updated"
+      check: "content_recently_updated"
+      priority: high
+
+    - rule: "No mentions of 'Betting Expert' in content"
+      check: "no_betting_expert_mention"
+      priority: critical
+      detail: "Even though GSB/Betting Expert produces timely content for Goal.com, the brand name must not appear"
+
+    - rule: "Breadcrumb navigation present in HTML"
+      check: "has_breadcrumb_navigation"
+      priority: high
+      detail: "Site-level E-E-A-T trust signal"
+
+  content_quality:
+    - rule: "Write in direct style with short phrases"
+      check: "direct_writing_style"
+      priority: medium
+      detail: "Avoid ornate or journalistic prose"
+
+    - rule: "Use rich lexical fields — synonyms, related words, semantic variations"
+      check: "rich_semantic_vocabulary"
+      priority: medium
+      detail: "Google understands word proximity via vectors — diverse vocabulary helps"
+
+    - rule: "Bold text used for key information"
+      check: "has_bold_key_info"
+      priority: medium
+
+    - rule: "Users should find critical info immediately (code, bonus, odds)"
+      check: "fast_info_access"
+      priority: high
+      detail: "Speed access to information is a core conversion principle"
+
+  hreflang:
+    - rule: "Hreflang tags must be present on every page"
+      check: "has_hreflang_tags"
+      priority: high
+      detail: "Tells Google which language/country version to show"
+
+    - rule: "Check if the article exists in another market and link via hreflang"
+      check: "hreflang_cross_market_linked"
+      priority: medium
+
+  responsible_gambling:
+    - rule: "Responsible gambling messaging present on all commercial pages"
+      check: "has_responsible_gambling"
+      priority: critical
+      detail: "Legal requirement in most markets"
+
+    - rule: "T&Cs must be visible"
+      check: "has_visible_terms_conditions"
+      priority: critical
+      detail: "Some markets require explicit T&Cs (e.g., bet365). African mobile: '18+ T&Cs apply, Play responsibly'"
+
+  cocoon_strategy:
+    - rule: "Pages within the same cocoon should be tightly interlinked"
+      check: "cocoon_interlinking_complete"
+      priority: high
+      detail: "Code page is the main target receiving authority from sibling pages"
+
+    - rule: "No keyword cannibalization within the cocoon"
+      check: "no_cocoon_cannibalization"
+      priority: high
+      detail: "Check if top 5 results are the same for different queries — same intent means one page should cover all"
+
+# ---------------------------------------------------------------------------
+# Per-page-type rules
+# ---------------------------------------------------------------------------
+page_types:
+
+  # =========================================================================
+  # CODE PAGE — Priority 1 (BC's #1 priority)
+  # =========================================================================
+  code_page:
+    description: "Highest conversion intent — users searching for promo codes are moments away from registering"
+
+    mandatory_elements:
+      - element: "H1 with code (if available), month, and year"
+        check: "h1_contains_code_month_year"
+        priority: critical
+        detail: "If no code exists, add the offer instead. Country may be added"
+
+      - element: "CTA above the fold"
+        check: "cta_above_fold"
+        priority: critical
+        detail: "Pattern with the offer — 'Claim the offer', 'Get the Bonus', etc."
+
+      - element: "1-sentence introduction with main info"
+        check: "has_short_intro_with_code"
+        priority: critical
+        detail: "'The Bookmaker promo code is XXXXXX' — simple, direct"
+
+      - element: "Minimum 2 tables per page"
+        check: "has_minimum_two_tables"
+        priority: high
+        detail: "1st table: most popular offer at top. 2nd table: all offers listed later"
+
+      - element: "'The code is CODE' in first paragraph"
+        check: "code_in_first_paragraph"
+        priority: critical
+
+      - element: "Code image / screenshot showing the code"
+        check: "has_code_image"
+        priority: high
+        detail: "Mandatory if a promo code exists"
+
+      - element: "Table of Contents (scrollable)"
+        check: "has_toc"
+        priority: high
+
+      - element: "H1 and meta-title include code, year, month, length-optimized"
+        check: "meta_title_has_code_year_month"
+        priority: critical
+
+      - element: "User can grab the code from the meta-title on the SERP"
+        check: "code_visible_in_serp_title"
+        priority: high
+
+      - element: "Bold text for key information"
+        check: "has_bold_key_info"
+        priority: medium
+
+      - element: "Real author (not fake)"
+        check: "has_real_author"
+        priority: high
+
+      - element: "Images including code field screenshot"
+        check: "has_images_with_code_screenshot"
+        priority: high
+
+      - element: "FAQ section (H2 with questions as H3)"
+        check: "has_faq_section"
+        priority: high
+
+    mandatory_sections:
+      - section: "What to use the code for / What is the code"
+        heading_level: "h2"
+        check: "has_section_what_is_code"
+        priority: high
+        detail: "Include table + code image"
+
+      - section: "How to use the code — step-by-step"
+        heading_level: "h2"
+        check: "has_section_how_to_use_code"
+        priority: high
+        detail: "Numbered list, clear & concise, internal link to registration page"
+
+      - section: "Bonus code terms and conditions"
+        heading_level: "h2"
+        check: "has_section_code_terms"
+        priority: high
+        detail: "Bullet list, 2-column table. Multiple offers → multiple H3s"
+
+      - section: "Other Promotions/Bonuses"
+        heading_level: "h2"
+        check: "has_section_other_promos"
+        priority: medium
+
+      - section: "Expert review of the promo code/bonus"
+        heading_level: "h2"
+        check: "has_section_expert_review"
+        priority: medium
+        detail: "Can serve as conclusion"
+
+      - section: "Versus — comparison with other bookmaker bonuses"
+        heading_level: "h2"
+        check: "has_section_versus_comparison"
+        priority: medium
+
+      - section: "FAQ"
+        heading_level: "h2"
+        check: "has_section_faq"
+        priority: high
+
+    cta_rules:
+      - rule: "CTA above the fold"
+        check: "cta_above_fold"
+        priority: critical
+
+      - rule: "Use plural in CTAs ('See all the promo codes') — proven better click rate"
+        check: "cta_uses_plural"
+        priority: high
+
+      - rule: "Display codes via search module rather than hidden CTA"
+        check: "code_via_search_module"
+        priority: high
+        detail: "Better conversion than hidden CTA"
+
+      - rule: "Show expired codes to increase trust"
+        check: "shows_expired_codes"
+        priority: medium
+
+      - rule: "CTA hidden format must look very different from pre-click state"
+        check: "cta_hidden_format_distinct"
+        priority: medium
+        detail: "Dotted outline, white background"
+
+      - rule: "Code must be fully selectable on click in discovered CTA"
+        check: "code_selectable_on_click"
+        priority: high
+
+      - rule: "Display just the code, not 'promo code: CODE'"
+        check: "code_displayed_clean"
+        priority: medium
+
+      - rule: "If referral code exists, put code in title with action verb"
+        check: "referral_code_in_title_with_verb"
+        priority: medium
+        detail: "e.g., 'WH promo code, write HILL100'"
+
+    serp_checklist:
+      - check_item: "Date published is recent"
+        check: "serp_date_recent"
+        priority: high
+
+      - check_item: "Table with description, code, minimum 3 rows"
+        check: "serp_table_min_3_rows"
+        priority: high
+
+      - check_item: "Simple 'The code is CODE' sentence in first paragraph"
+        check: "serp_code_in_first_para"
+        priority: critical
+
+      - check_item: "FAQ present"
+        check: "serp_faq_present"
+        priority: high
+
+      - check_item: "ToC present"
+        check: "serp_toc_present"
+        priority: high
+
+      - check_item: "H1/meta-title: code, year, month, length"
+        check: "serp_h1_meta_optimized"
+        priority: critical
+
+      - check_item: "Bold text used"
+        check: "serp_bold_text_used"
+        priority: medium
+
+      - check_item: "Real or fake author"
+        check: "serp_real_author"
+        priority: high
+
+      - check_item: "Images + code field screenshot"
+        check: "serp_has_images"
+        priority: high
+
+      - check_item: "YTG check for missing keywords and entities"
+        check: "serp_ytg_keyword_check"
+        priority: medium
+
+      - check_item: "Keyword gap analysis with Search Console"
+        check: "serp_keyword_gap_gsc"
+        priority: medium
+
+      - check_item: "Competitor comparison: word count, H2/H3 structure"
+        check: "serp_competitor_structure_comparison"
+        priority: medium
+
+  # =========================================================================
+  # REGISTRATION PAGE — Priority 2
+  # =========================================================================
+  registration_page:
+    description: "User wants to sign up on a bookmaker platform. High conversion, second priority."
+
+    mandatory_elements:
+      - element: "H1 present"
+        check: "has_h1"
+        priority: critical
+
+      - element: "CTA above the fold — 'Register + bookmaker'"
+        check: "cta_above_fold_register"
+        priority: critical
+        detail: "CTA text must match registration intent"
+
+      - element: "1-sentence introduction summarizing the article"
+        check: "has_short_intro"
+        priority: high
+        detail: "Brief, think about Featured Snippet potential"
+
+      - element: "Registration info table (sign-in time, verification, register link)"
+        check: "has_registration_info_table"
+        priority: high
+
+      - element: "Table of Contents (foldable if possible, use BC Pattern)"
+        check: "has_toc"
+        priority: high
+
+    mandatory_sections:
+      - section: "Steps of registration"
+        heading_level: "h2"
+        check: "has_section_registration_steps"
+        priority: critical
+        detail: "Intro sentence + simple numbered list, mobile screenshots"
+
+      - section: "Register with welcome bonus"
+        heading_level: "h2"
+        check: "has_section_register_with_bonus"
+        priority: high
+        detail: "Screenshot of form with code, explain when/how to use code"
+
+      - section: "Requirements for registration"
+        heading_level: "h2"
+        check: "has_section_registration_requirements"
+        priority: high
+
+      - section: "Verifying identity"
+        heading_level: "h3"
+        check: "has_subsection_verify_identity"
+        priority: high
+
+      - section: "What to do after sign up"
+        heading_level: "h3"
+        check: "has_subsection_after_signup"
+        priority: medium
+
+      - section: "Comparison between 2 operators"
+        heading_level: "h2"
+        check: "has_section_operator_comparison"
+        priority: medium
+        detail: "Keep nuanced, double-check AI-generated rotation paragraphs"
+
+      - section: "Mobile app registration"
+        heading_level: "h2"
+        check: "has_section_mobile_registration"
+        priority: medium
+        detail: "Skip or minimize if too similar to main step-by-step"
+
+      - section: "FAQ"
+        heading_level: "h2"
+        check: "has_section_faq"
+        priority: high
+
+    special_rules:
+      - rule: "Internal link to code page and review page"
+        check: "links_to_code_and_review"
+        priority: high
+
+      - rule: "Give reasons to register with summary table"
+        check: "has_reasons_to_register_table"
+        priority: medium
+
+  # =========================================================================
+  # COMPARATOR PAGE — Priority 3
+  # =========================================================================
+  comparator_page:
+    description: "User comparing operators — 'best betting sites in [country]'. Good conversion, nice query volume."
+
+    mandatory_elements:
+      - element: "Block of operators (with apps mention if applicable)"
+        check: "has_operator_block"
+        priority: critical
+
+      - element: "Introduction explaining the article's purpose"
+        check: "has_intro"
+        priority: high
+
+      - element: "Betting site/app of the week/month — 4 variations"
+        check: "has_featured_operator"
+        priority: high
+
+      - element: "Top apps/sites section"
+        check: "has_top_section"
+        priority: high
+
+      - element: "'How we tested' section explaining evaluation method"
+        check: "has_how_we_tested"
+        priority: high
+        detail: "Highlight freelancer expertise"
+
+      - element: "Best by category — comparison table (sports, features, bonuses)"
+        check: "has_best_by_category_table"
+        priority: high
+
+      - element: "How to download / How to sign up section"
+        check: "has_how_to_section"
+        priority: medium
+
+      - element: "FAQ pattern"
+        check: "has_faq_section"
+        priority: high
+
+      - element: "Sticky CTA if pushing a specific operator"
+        check: "has_sticky_cta"
+        priority: medium
+
+      - element: "Responsible Gambling section with legal info and licenses table"
+        check: "has_responsible_gambling_section"
+        priority: critical
+        detail: "'Is it legal in [market]?' + table listing operators and their licenses"
+
+    desktop_above_fold:
+      - rule: "Updated H1 with main keyword"
+        check: "desktop_h1_with_keyword"
+        priority: critical
+
+      - rule: "Short intro"
+        check: "desktop_short_intro"
+        priority: high
+
+      - rule: "Bookmaker overview table with actionable logos, value props, payment methods, USPs, CTA, T&Cs"
+        check: "desktop_overview_table"
+        priority: critical
+
+      - rule: "Show at least 2 bookmakers in first fold"
+        check: "desktop_min_2_bookmakers_above_fold"
+        priority: high
+
+    mobile_above_fold:
+      - rule: "H1 short, concise, with main keyword"
+        check: "mobile_h1_concise"
+        priority: critical
+
+      - rule: "Today's date visible"
+        check: "mobile_date_visible"
+        priority: high
+
+      - rule: "Card layout or condensed table — no side-scroll tables"
+        check: "mobile_card_layout"
+        priority: critical
+        detail: "Regular tables with side-scrolls don't work on mobile"
+
+      - rule: "Bookmaker card: CTA, logo, bonus/offer, USP ribbon, deposit methods, star rating, T&Cs"
+        check: "mobile_bookmaker_card_complete"
+        priority: high
+
+    content_structure:
+      - rule: "Each operator as H3 with: welcome bonus, features list, pros & cons"
+        check: "operator_h3_with_details"
+        priority: high
+
+      - rule: "Big comparison table with max 3 sections"
+        check: "comparison_table_max_3_sections"
+        priority: medium
+
+      - rule: "Sub-pages for best-by-category and best-per-event"
+        check: "has_sub_pages_strategy"
+        priority: low
+
+      - rule: "Include conjunctions for vs-queries per language"
+        check: "vs_query_conjunctions"
+        priority: medium
+        detail: "FR: ou/et/vs, ES: y/o/vs, UK: and/or/vs/versus, IT: e/o/vs/contro, DE: und/oder/vs/gegen"
+
+  # =========================================================================
+  # REVIEW PAGE — Priority 4
+  # =========================================================================
+  review_page:
+    description: "Pillar/hub page for the operator. Key for internal linking. Don't target 'review' keyword — rank on brand name + market."
+
+    important_notes:
+      - "Don't target the word 'review' as keyword — rank on brand name + market"
+      - "Google often prefers registration pages for these searches"
+      - "Review page exists primarily for SEO internal linking purposes"
+      - "Present the brand, its offers, all features — be comprehensive"
+
+    above_fold:
+      - element: "Eye-catching H1 (not too long) including bookmaker name"
+        check: "h1_has_bookmaker_name"
+        priority: critical
+
+      - element: "Prominent bookmaker logo + operator rating/score"
+        check: "has_logo_and_rating"
+        priority: high
+
+      - element: "Feature ratings (live betting, customer service, withdrawals, odds)"
+        check: "has_feature_ratings"
+        priority: high
+        detail: "Visual aids like circular rating bars, OR short bullet point summary"
+
+      - element: "Author and date visible"
+        check: "has_author_and_date"
+        priority: high
+
+      - element: "CTA button visible in first viewport on mobile & desktop"
+        check: "cta_in_first_viewport"
+        priority: critical
+
+      - element: "Video review (preferably BC's own)"
+        check: "has_video_review"
+        priority: medium
+
+    below_fold:
+      - element: "Step-by-step registration guide"
+        check: "has_registration_guide"
+        priority: high
+
+      - element: "Welcome offer with headline"
+        check: "has_welcome_offer"
+        priority: high
+
+      - element: "Table of Contents"
+        check: "has_toc"
+        priority: high
+
+      - element: "Short intro paragraph about the bookmaker + history"
+        check: "has_bookmaker_intro"
+        priority: high
+
+      - element: "Pros & Cons visually formatted"
+        check: "has_pros_cons"
+        priority: high
+
+      - element: "FAQ section with FAQ schema"
+        check: "has_faq_with_schema"
+        priority: high
+
+      - element: "Review schema markup"
+        check: "has_review_schema"
+        priority: high
+
+    mandatory_sections:
+      - section: "Read our review of (operator) — introduction/guide"
+        heading_level: "h2"
+        check: "has_section_review_intro"
+        priority: high
+        detail: "Quick facts (founded, years active), Pros & Cons at the beginning"
+
+      - section: "Getting started with (operator) — registration"
+        heading_level: "h2"
+        check: "has_section_getting_started"
+        priority: high
+        detail: "Under 100 words, quick 'how to register' numbered bullet points, link to registration page + CTA"
+
+      - section: "Understanding the operator's Bonus & Promotions"
+        heading_level: "h2"
+        check: "has_section_bonus_promotions"
+        priority: high
+        detail: "150 words total, focus on main offer, table comparing promotions, link to code page + CTA"
+
+      - section: "Casino/Sports/E-sport overview"
+        heading_level: "h2"
+        check: "has_section_product_overview"
+        priority: high
+        detail: "H3 per sub-category: aviator, lucky numbers, jackpot, etc. Adapt per operator"
+
+      - section: "Discover all special features"
+        heading_level: "h2"
+        check: "has_section_special_features"
+        priority: medium
+        detail: "300 words total. H3: Live betting & streaming, Cash out & bet builder, etc."
+
+      - section: "Operator app — how good is it?"
+        heading_level: "h2"
+        check: "has_section_app_review"
+        priority: medium
+        detail: "H3: data free features & details. Link to app page"
+
+      - section: "How to place bets"
+        heading_level: "h2"
+        check: "has_section_how_to_bet"
+        priority: medium
+        detail: "100 words"
+
+      - section: "Understanding payments"
+        heading_level: "h2"
+        check: "has_section_payments"
+        priority: high
+        detail: "Table with deposit & withdrawal methods + links"
+
+      - section: "Security"
+        heading_level: "h2"
+        check: "has_section_security"
+        priority: high
+
+      - section: "Legal"
+        heading_level: "h2"
+        check: "has_section_legal"
+        priority: high
+
+      - section: "Compare other operators"
+        heading_level: "h2"
+        check: "has_section_compare_operators"
+        priority: medium
+        detail: "Comparison table"
+
+      - section: "Customer service details"
+        heading_level: "h2"
+        check: "has_section_customer_service"
+        priority: medium
+        detail: "50 words"
+
+      - section: "Our conclusion"
+        heading_level: "h2"
+        check: "has_section_conclusion"
+        priority: high
+        detail: "150 words, pros & cons table"
+
+      - section: "Review FAQs"
+        heading_level: "h2"
+        check: "has_section_review_faqs"
+        priority: high
+
+    monetization_rules:
+      - rule: "Sticky CTA on bookmaker articles"
+        check: "has_sticky_cta"
+        priority: high
+
+      - rule: "BC Block in Bonuses & Promotions comparison"
+        check: "has_bc_block_in_bonus_section"
+        priority: medium
+
+      - rule: "CTA in registration section with 'register' text"
+        check: "registration_cta_has_register_text"
+        priority: high
+
+      - rule: "CTA in app section with 'download' text"
+        check: "app_cta_has_download_text"
+        priority: medium
+
+      - rule: "Use different monetization in different assets throughout the page"
+        check: "varied_monetization_assets"
+        priority: medium
+
+  # =========================================================================
+  # APP PAGE — Priority 5
+  # =========================================================================
+  app_page:
+    description: "User wants to download the operator's app. Medium conversion."
+
+    mandatory_elements:
+      - element: "Title with year (mandatory, month not needed)"
+        check: "title_has_year"
+        priority: critical
+        detail: "Signals freshness"
+
+      - element: "Intro: which OS available, how long to download"
+        check: "has_intro_with_os_info"
+        priority: high
+
+      - element: "Summary table: system requirements, file size, OS, storage, download link"
+        check: "has_summary_table"
+        priority: high
+
+      - element: "How to download sections (Android, iOS, data-free)"
+        check: "has_download_instructions"
+        priority: critical
+        detail: "System requirements, installation steps per platform"
+
+      - element: "Features section: live betting, streaming, welcome bonus, deposit/withdrawal"
+        check: "has_features_section"
+        priority: high
+        detail: "H3 per feature"
+
+      - element: "Security section"
+        check: "has_section_security"
+        priority: high
+
+      - element: "How to register via the app"
+        check: "has_section_register_via_app"
+        priority: high
+        detail: "Easy, no step-by-step — one paragraph + navigational link to registration page"
+
+      - element: "Pros + Cons"
+        check: "has_pros_cons"
+        priority: high
+        detail: "Test at beginning vs end"
+
+      - element: "App vs Mobile version comparison (if applicable)"
+        check: "has_app_vs_mobile_comparison"
+        priority: medium
+        detail: "Pros & cons table for each version"
+
+      - element: "FAQ section"
+        check: "has_faq_section"
+        priority: high
+
+      - element: "Images: mobile simulator, carousel for download/sign-up steps"
+        check: "has_mobile_simulator_images"
+        priority: high
+
+    bc_patterns:
+      - pattern: "123 sticky CTA"
+        check: "has_sticky_cta_123"
+        priority: medium
+
+      - pattern: "BC blocks: operator list (mobile apps)"
+        check: "has_bc_operator_block"
+        priority: medium
+
+  # =========================================================================
+  # TIMELY CONTENT — Priority 7 (predictions, tips, pronostics)
+  # =========================================================================
+  timely_content:
+    description: "Match predictions, tips, passion content. Low conversion but drives traffic, E-E-A-T, internal linking, Google Discover."
+
+    why_it_matters:
+      - "E-E-A-T: Demonstrates expertise in sports betting"
+      - "Internal linking opportunities to commercial pages"
+      - "Monetization potential via sticky CTAs"
+      - "Top Stories / Google Discover ranking opportunity"
+      - "Should account for ~70% of content on media sites (e.g., Goal.com)"
+
+    featured_tip_above_fold:
+      - element: "H1"
+        check: "has_h1"
+        priority: critical
+
+      - element: "Short intro"
+        check: "has_short_intro"
+        priority: high
+
+      - element: "Match/Event information"
+        check: "has_match_event_info"
+        priority: critical
+
+      - element: "Clear odds and short actionable tip"
+        check: "has_odds_and_tip"
+        priority: critical
+
+      - element: "Option to expand tip and read more (fold-out)"
+        check: "has_expandable_tip"
+        priority: medium
+
+      - element: "CTA with bookmaker logo"
+        check: "has_cta_with_bookmaker_logo"
+        priority: high
+
+      - element: "Match Analysis button for full analysis"
+        check: "has_match_analysis_link"
+        priority: medium
+
+    event_tip_page:
+      - element: "H1, Author and date"
+        check: "has_h1_author_date"
+        priority: critical
+
+      - element: "Content category label (league, sport)"
+        check: "has_content_category_label"
+        priority: high
+
+      - element: "Actionable tip with CTA high on page (first viewport)"
+        check: "actionable_tip_in_first_viewport"
+        priority: critical
+        detail: "Show comparison of bookmaker odds, highlighting best odds, summarize tip in bullet points"
+
+      - element: "Visual breakers (team comparisons, injuries, last results)"
+        check: "has_visual_breakers"
+        priority: medium
+
+      - element: "Contextualized CTAs throughout giving reasons to click"
+        check: "has_contextualized_ctas"
+        priority: high
+
+      - element: "Repeat the tip at the end (different text)"
+        check: "tip_repeated_at_end"
+        priority: medium
+
+    tips_hub_page:
+      - element: "Main/Highlighted tips of the day above all others"
+        check: "has_highlighted_tips"
+        priority: high
+
+      - element: "Quick links to sub-categories (leagues, sports)"
+        check: "has_subcategory_links"
+        priority: high
+        detail: "Great for internal linking + SEO"
+
+      - element: "Tip summaries with odds and bookmaker CTAs"
+        check: "has_tip_summaries_with_odds"
+        priority: high
+
+      - element: "No 1-2-3 pagination — use other patterns"
+        check: "no_numbered_pagination"
+        priority: medium
+
+    important_rules:
+      - rule: "No mentions of 'Betting Expert' in content"
+        check: "no_betting_expert_mention"
+        priority: critical
+
+  # =========================================================================
+  # BETTING OVERVIEW / HOMEPAGE — Priority 8
+  # =========================================================================
+  betting_overview:
+    description: "Homepage and betting overview pages. Navigational hub for internal linking."
+
+    homepage_rules:
+      - rule: "Feature categories with most popular content types"
+        check: "homepage_has_content_categories"
+        priority: high
+        detail: "Tips hub, tip of the day, etc."
+
+      - rule: "Quick links to key sub-categories — minimize clicks to relevant content"
+        check: "homepage_has_quick_links"
+        priority: high
+
+    overview_rules:
+      - rule: "Desktop: bookmaker overview table is the winning combination"
+        check: "desktop_overview_table"
+        priority: high
+
+      - rule: "Mobile: card layout or condensed tables — no side-scroll tables"
+        check: "mobile_card_layout"
+        priority: high
+
+  # =========================================================================
+  # GUIDE — Priority 6 (informational)
+  # =========================================================================
+  guide:
+    description: "Informational content — user learning about betting. Builds topical authority and semantic coverage."
+
+    # Guide pages follow universal rules primarily. These are additional specifics:
+    mandatory_elements:
+      - element: "Clear informational H1"
+        check: "has_informational_h1"
+        priority: critical
+
+      - element: "Table of Contents"
+        check: "has_toc"
+        priority: high
+
+      - element: "FAQ section"
+        check: "has_faq_section"
+        priority: high
+
+      - element: "Internal links to related commercial pages (code, registration, comparator)"
+        check: "has_links_to_commercial_pages"
+        priority: high
+        detail: "Guides exist to build semantic authority and funnel users to money pages"
+
+# ---------------------------------------------------------------------------
+# Schema markup requirements — per page type
+# ---------------------------------------------------------------------------
+schema_requirements:
+  code_page:
+    required:
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: critical
+
+      - schema: "Article or NewsArticle"
+        check: "schema_article"
+        priority: high
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+      - schema: "WebPage"
+        check: "schema_webpage"
+        priority: medium
+
+      - schema: "HowTo"
+        check: "schema_howto"
+        priority: medium
+
+      - schema: "ItemList"
+        check: "schema_itemlist"
+        priority: medium
+
+  registration_page:
+    required:
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: high
+
+      - schema: "Article"
+        check: "schema_article"
+        priority: high
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+  comparator_page:
+    required:
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: high
+
+      - schema: "Article"
+        check: "schema_article"
+        priority: high
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+      - schema: "ItemList"
+        check: "schema_itemlist"
+        priority: high
+
+  review_page:
+    required:
+      - schema: "Review"
+        check: "schema_review"
+        priority: critical
+
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: high
+
+      - schema: "Article"
+        check: "schema_article"
+        priority: high
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+      - schema: "Organization"
+        check: "schema_organization"
+        priority: medium
+
+  app_page:
+    required:
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: high
+
+      - schema: "Article"
+        check: "schema_article"
+        priority: high
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+      - schema: "SoftwareApplication"
+        check: "schema_software_application"
+        priority: high
+
+  guide:
+    required:
+      - schema: "Article"
+        check: "schema_article"
+        priority: high
+
+      - schema: "FAQPage"
+        check: "schema_faqpage"
+        priority: high
+
+      - schema: "HowTo"
+        check: "schema_howto"
+        priority: medium
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+  timely_content:
+    required:
+      - schema: "NewsArticle"
+        check: "schema_newsarticle"
+        priority: critical
+
+      - schema: "BreadcrumbList"
+        check: "schema_breadcrumb"
+        priority: high
+
+      - schema: "Event"
+        check: "schema_event"
+        priority: medium
+
+      - schema: "SportsEvent"
+        check: "schema_sportsevent"
+        priority: medium
+
+# ---------------------------------------------------------------------------
+# Conversion optimization principles
+# ---------------------------------------------------------------------------
+conversion_optimization:
+  core_criteria:
+    - criterion: "Speed Access to Information"
+      check: "conversion_speed_access"
+      priority: critical
+      detail: "Minimize redirections, steps, and clicks to conversion"
+
+    - criterion: "Usability / Practicality"
+      check: "conversion_usability"
+      priority: critical
+      detail: "Visibility, ease to copy/paste, features working fast"
+
+    - criterion: "Trust"
+      check: "conversion_trust"
+      priority: critical
+      detail: "Security signals, complete and updated information"
+
+  proven_optimizations:
+    - optimization: "Plural in CTAs ('See all promo codes') → better click rate"
+      check: "cta_uses_plural"
+      applies_to: ["code_page"]
+
+    - optimization: "Codes via search module → better conversion than hidden CTA"
+      check: "code_via_search_module"
+      applies_to: ["code_page"]
+
+    - optimization: "Show expired codes → increases trust"
+      check: "shows_expired_codes"
+      applies_to: ["code_page"]
+
+    - optimization: "Card layout on mobile → better than tables for comparators"
+      check: "mobile_card_layout"
+      applies_to: ["comparator_page", "betting_overview"]
+
+    - optimization: "Bookmaker overview table on desktop → proven winning combination"
+      check: "desktop_overview_table"
+      applies_to: ["comparator_page", "betting_overview"]
+
+  benchmark_results:
+    - test: "Header review summaries"
+      result: "23-26% CTP CVR (varies by market)"
+      applies_to: ["review_page"]
+
+    - test: "Featured tip with odds comparison in first viewport"
+      result: "+123% CVR improvement"
+      applies_to: ["timely_content"]
+
+    - test: "Tip pages with contextualized CTAs"
+      result: "+711% increase in average FTDs"
+      applies_to: ["timely_content"]
+
+    - test: "Betting overview with optimized table"
+      result: "+153% CVR improvement"
+      applies_to: ["betting_overview"]
+
+# ---------------------------------------------------------------------------
+# Featured snippets strategy
+# ---------------------------------------------------------------------------
+featured_snippets:
+  rules:
+    - rule: "Monitor SERPs for priority keywords daily"
+      check: "fs_daily_serp_monitoring"
+      priority: high
+
+    - rule: "Identify competitor Featured Snippets and adapt content to capture them"
+      check: "fs_competitor_snippet_analysis"
+      priority: high
+
+    - rule: "Use recommended formats: paragraphs, lists, tables, images, or concise answers matching intent"
+      check: "fs_content_format_optimized"
+      priority: high
+
+    - rule: "Code pages should surface the code directly in meta-title/description for SERP visibility"
+      check: "fs_code_in_meta"
+      priority: critical
+      applies_to: ["code_page"]
+
+# ---------------------------------------------------------------------------
+# Google updates awareness
+# ---------------------------------------------------------------------------
+google_updates_awareness:
+  - update: "Site Reputation Abuse"
+    check: "aware_site_reputation_abuse"
+    priority: critical
+    detail: "Impacts affiliate sites — ensure content is not purely third-party hosted for ranking"
+
+  - update: "Helpful Content Update (HCU)"
+    check: "aware_helpful_content"
+    priority: critical
+    detail: "Rewards genuinely helpful content, penalizes content created primarily for SEO"
+
+  - update: "Core updates"
+    check: "aware_core_updates"
+    priority: high
+    detail: "Continuous monitoring and adaptation required"
+
+# ---------------------------------------------------------------------------
+# SERP analysis checklist (what BC checks manually today — tool automates this)
+# ---------------------------------------------------------------------------
+serp_analysis_checklist:
+
+  cocoon_strategy:
+    - check_item: "Number of cocoons covered by competitors"
+      check: "serp_competitor_cocoon_count"
+      priority: high
+      detail: "site:domain.com intitle:brand (num=100)"
+
+    - check_item: "Navigate competitors to find coverage gaps"
+      check: "serp_competitor_coverage_gaps"
+      priority: high
+
+    - check_item: "Check actual cocoon and cannibalization"
+      check: "serp_cocoon_cannibalization"
+      priority: high
+
+  site_structure:
+    - check_item: "Is the code page linked through the homepage or menu?"
+      check: "serp_code_page_in_nav"
+      priority: high
+
+    - check_item: "Is BC latest post / sidebar of the bundle in place?"
+      check: "serp_bundle_sidebar_present"
+      priority: medium
+
+    - check_item: "Is internal linking of the bundle in place?"
+      check: "serp_bundle_interlinking"
+      priority: high
+
+    - check_item: "Is edito links pushed for the page + bundle?"
+      check: "serp_edito_links_pushed"
+      priority: medium
+
+    - check_item: "Breadcrumb / categories in place?"
+      check: "serp_breadcrumb_categories"
+      priority: high
+
+    - check_item: "All go-to links are nofollow?"
+      check: "serp_goto_links_nofollow"
+      priority: critical
+
+  on_content:
+    - check_item: "Date published is recent"
+      check: "serp_date_recent"
+      priority: high
+
+    - check_item: "Table with description, code, min 3 rows"
+      check: "serp_table_min_3_rows"
+      priority: high
+
+    - check_item: "'The code is CODE' in first paragraph"
+      check: "serp_code_in_first_para"
+      priority: critical
+
+    - check_item: "FAQ present"
+      check: "serp_faq_present"
+      priority: high
+
+    - check_item: "ToC present"
+      check: "serp_toc_present"
+      priority: high
+
+    - check_item: "H1 and meta-title: code, year, month, length"
+      check: "serp_h1_meta_optimized"
+      priority: critical
+
+    - check_item: "Bold text used"
+      check: "serp_bold_text_used"
+      priority: medium
+
+    - check_item: "Real or fake author"
+      check: "serp_real_author"
+      priority: high
+
+    - check_item: "Images + code field screenshot"
+      check: "serp_has_images"
+      priority: high
+
+    - check_item: "YTG check for missing keywords and entities"
+      check: "serp_ytg_keyword_check"
+      priority: medium
+
+    - check_item: "Keyword gap analysis with Search Console"
+      check: "serp_keyword_gap_gsc"
+      priority: medium
+
+    - check_item: "Competitor comparison: word count, H2/H3 structure, HN structure"
+      check: "serp_competitor_structure_comparison"
+      priority: medium
+
+  technical:
+    - check_item: "PageSpeed check"
+      check: "serp_pagespeed"
+      priority: high
+
+    - check_item: "Schema markup: FAQ, Article, News, Event"
+      check: "serp_schema_present"
+      priority: high
+
+  backlinks:
+    - check_item: "Backlinks to code page + cocoon sent"
+      check: "serp_backlinks_to_cocoon"
+      priority: medium
+
+  full_seo_analysis:
+    - check_item: "Majestic authority: TF, 1st topic, Sport TF / Games TF"
+      check: "serp_majestic_authority"
+      priority: medium
+
+    - check_item: "Majestic backlinks: backlinks and referral domains"
+      check: "serp_majestic_backlinks"
+      priority: medium
+
+    - check_item: "YTG: SOSEO / DSEO"
+      check: "serp_ytg_scores"
+      priority: medium
+
+    - check_item: "Content word count and number of related articles"
+      check: "serp_content_depth"
+      priority: high
+
+    - check_item: "PageSpeed"
+      check: "serp_pagespeed_full"
+      priority: high
+
+    - check_item: "Hreflang strategy"
+      check: "serp_hreflang_strategy"
+      priority: medium
+
+    - check_item: "Number of external links"
+      check: "serp_external_link_count"
+      priority: medium
+
+    - check_item: "Number of pages indexed on the site"
+      check: "serp_indexed_page_count"
+      priority: medium
+
+    - check_item: "Traffic of the site"
+      check: "serp_site_traffic"
+      priority: medium
+
+# ---------------------------------------------------------------------------
+# Additional programmatic checks
+# ---------------------------------------------------------------------------
+programmatic_checks:
+
+  internal_linking_quality:
+    - rule: "Anchor text naturally embedded in a sentence"
+      check: "anchor_in_sentence_context"
+      priority: high
+      detail: "Not isolated keyword links, but contextual anchors within natural prose"
+
+    - rule: "Cross-links within cocoon/bundle present"
+      check: "cocoon_cross_links_present"
+      priority: high
+      detail: "Code <-> registration <-> review <-> app. Flag missing cross-links"
+
+  eeat_site_level:
+    - rule: "About Us page exists on the site"
+      check: "site_has_about_page"
+      priority: high
+
+    - rule: "Contact page exists on the site"
+      check: "site_has_contact_page"
+      priority: high
+
+    - rule: "Breadcrumb navigation present in HTML"
+      check: "has_breadcrumb_navigation"
+      priority: high
+
+  serp_benchmarking:
+    - rule: "Word count benchmark vs competitors"
+      check: "word_count_vs_competitors"
+      priority: high
+      detail: "Flag if significantly shorter (thin content) or longer (potential bloat)"
+
+    - rule: "Hreflang tags present on the page"
+      check: "has_hreflang_tags"
+      priority: high
+
+# ---------------------------------------------------------------------------
+# Open questions (deferred — not yet implemented as checks)
+# ---------------------------------------------------------------------------
+open_questions:
+  - question: "Market-specific compliance rules"
+    status: "deferred"
+    detail: "Too extensive to document now. Find a smart automated approach (AI-based?) rather than manual config per market"
+
+  - question: "Sticky CTA rules — when exactly to recommend one"
+    status: "deferred"
+    detail: "Decision deferred to build phase"
+
+  - question: "BC Blocks detection — check for rendered operator blocks in HTML"
+    status: "deferred"
+    detail: "Tool scrapes rendered HTML, could check for this. Value TBD during build"
