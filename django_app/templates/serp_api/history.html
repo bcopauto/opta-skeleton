@@ -1,0 +1,78 @@
+{% extends "serp_api/base.html" %}
+{% block title %}History{% endblock %}
+
+{% block sidebar_content %}
+<nav>
+  <a href="{% url 'serp_api:index' %}" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    New Analysis
+  </a>
+  <a href="{% url 'serp_api:history' %}" class="sidebar-nav-item active">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    History
+  </a>
+  <a href="{% url 'ahrefs:ahrefs_index' %}" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    Ahrefs
+  </a>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="card animate-in" style="margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="card-title" style="margin-bottom:0">Recent Snapshots</div>
+    <a href="{% url 'serp_api:index' %}" class="btn btn-sm">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Analysis
+    </a>
+  </div>
+</div>
+
+<div class="card animate-in" style="padding:0;overflow:hidden">
+  {% if snapshots %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Keyword</th>
+        <th>Market</th>
+        <th>Language</th>
+        <th>Fetched at</th>
+        <th>Status</th>
+        <th>Organics</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for snap in snapshots %}
+      <tr>
+        <td><span style="color:var(--text-muted);font-family:var(--mono);font-size:12px">#{{ snap.id }}</span></td>
+        <td><strong style="color:var(--text-primary)">{{ snap.query_text }}</strong></td>
+        <td><span style="color:var(--text-secondary)">{{ snap.keyword.market }}</span></td>
+        <td><span style="color:var(--text-secondary)">{{ snap.keyword.language }}</span></td>
+        <td><span style="color:var(--text-muted);font-family:var(--mono);font-size:12px">{{ snap.snapshot_at|date:"Y-m-d H:i" }}</span></td>
+        <td>
+          {% if snap.status == "success" %}
+            <span class="status-badge status-done">success</span>
+          {% else %}
+            <span class="status-badge status-error">{{ snap.status }}</span>
+          {% endif %}
+        </td>
+        <td><span style="color:var(--text-muted);font-family:var(--mono);font-size:12px">{{ snap.organic_results.count }}</span></td>
+        <td>
+          <a href="{% url 'serp_api:snapshot_detail' snap.id %}" class="btn btn-outline btn-sm">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="padding:40px;text-align:center">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:12px;display:block;margin-left:auto;margin-right:auto"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <p class="muted" style="margin-bottom:12px">No snapshots yet.</p>
+    <a href="{% url 'serp_api:index' %}" class="btn btn-sm">Run your first analysis →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

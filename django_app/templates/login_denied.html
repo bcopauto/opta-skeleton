@@ -1,0 +1,11 @@
+<h2>Access denied</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<p>Your account is not allowed to access this system.</p>
+
+<a href="/login/">Back to login</a>

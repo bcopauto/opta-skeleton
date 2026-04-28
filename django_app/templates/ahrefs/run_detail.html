@@ -1,0 +1,202 @@
+{% extends "ahrefs/base.html" %}
+{% block ahrefs_title %}Run #{{ run.id }} – Ahrefs Backlinks{% endblock %}
+
+{% block ahrefs_sidebar %}
+<div style="border-top:1px solid var(--border-subtle);padding-top:14px">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Run Details</div>
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Run ID</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">#{{ run.id }}</div>
+  </div>
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Status</div>
+    <span class="status-badge status-{% if run.status == 'success' %}done{% elif run.status == 'error' %}error{% else %}running{% endif %}">
+      {{ run.status }}
+    </span>
+  </div>
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Started</div>
+    <div style="font-size:12px;color:var(--text-secondary);font-family:var(--mono)">{{ run.requested_at|date:"Y-m-d H:i" }}</div>
+  </div>
+
+  {% if run.serp_snapshot_id %}
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">SERP Snapshot</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">#{{ run.serp_snapshot_id }}</div>
+  </div>
+  {% endif %}
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">URLs</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ results|length }}</div>
+  </div>
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">API Units</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ run.api_units_total }}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block ahrefs_content %}
+
+<!-- Header -->
+<div class="card animate-in" style="margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+    <div>
+      <div class="card-title" style="margin-bottom:6px">
+        Backlink Run #{{ run.id }}
+        <span class="status-badge status-{% if run.status == 'success' %}done{% elif run.status == 'error' %}error{% else %}running{% endif %}" style="margin-left:8px;vertical-align:middle">{{ run.status }}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="font-size:12px;color:var(--text-muted);font-family:var(--mono)">{{ run.requested_at|date:"Y-m-d H:i" }}</span>
+        {% if run.serp_snapshot_id %}
+        <span style="font-size:12px;color:var(--text-muted)">Snapshot #{{ run.serp_snapshot_id }}</span>
+        {% endif %}
+        <span style="font-size:12px;color:var(--text-muted)">{{ run.api_units_total }} API units</span>
+        <span style="font-size:12px;color:var(--text-muted)">{{ results|length }} URLs</span>
+      </div>
+    </div>
+    <a href="{% url 'ahrefs:ahrefs_index' %}" class="btn btn-outline btn-sm" style="flex-shrink:0">← New Run</a>
+  </div>
+
+  {% if run.error_message %}
+  <div class="alert alert-error" style="margin-top:14px;margin-bottom:0">{{ run.error_message }}</div>
+  {% endif %}
+</div>
+
+<!-- Quality filter note -->
+<div class="card animate-in" style="margin-bottom:20px;padding:10px 16px">
+  <div style="font-size:12px;color:var(--text-muted)">
+    <strong style="color:var(--text-secondary)">Filters applied:</strong>
+    Domain Rating ≥ 20 &nbsp;·&nbsp; Traffic ≥ 500 &nbsp;·&nbsp; External links ≤ 100 &nbsp;·&nbsp;
+    Aggregated by referring domain &nbsp;·&nbsp; Mode: <code style="font-family:var(--mono);font-size:11px;color:var(--bc-green-light)">exact</code> (page) + <code style="font-family:var(--mono);font-size:11px;color:var(--bc-green-light)">subdomains</code> (domain)
+  </div>
+</div>
+
+<!-- Summary stats -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px">
+  <div class="card animate-in" style="text-align:center;padding:16px 20px;margin-bottom:0">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px">Page Backlinks</div>
+    <div style="font-size:26px;font-weight:800;color:var(--bc-green)">{{ total_page_bl }}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">sum across all pages</div>
+  </div>
+  <div class="card animate-in" style="text-align:center;padding:16px 20px;margin-bottom:0">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px">Page Ref. Domains</div>
+    <div style="font-size:26px;font-weight:800;color:var(--bc-green)">{{ total_page_rd }}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">sum across all pages</div>
+  </div>
+  <div class="card animate-in" style="text-align:center;padding:16px 20px;margin-bottom:0">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px">Domain Backlinks</div>
+    <div style="font-size:26px;font-weight:800;color:var(--cta-blue)">{{ total_domain_bl }}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">sum across all domains</div>
+  </div>
+  <div class="card animate-in" style="text-align:center;padding:16px 20px;margin-bottom:0">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px">Domain Ref. Domains</div>
+    <div style="font-size:26px;font-weight:800;color:var(--cta-blue)">{{ total_domain_rd }}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">sum across all domains</div>
+  </div>
+</div>
+
+<!-- Results table -->
+<div class="card animate-in" style="padding:0;overflow:hidden;margin-bottom:20px">
+  <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>URL / Domain</th>
+          <th colspan="2" style="text-align:center;border-left:1px solid var(--border-subtle)">Page (exact)</th>
+          <th colspan="2" style="text-align:center;border-left:1px solid var(--border-subtle)">Domain (subdomains)</th>
+          <th>Status</th>
+          <th>Units</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th style="border-left:1px solid var(--border-subtle)">Backlinks</th>
+          <th>Ref. Domains</th>
+          <th style="border-left:1px solid var(--border-subtle)">Backlinks</th>
+          <th>Ref. Domains</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td style="color:var(--text-muted)">{{ r.position|default:forloop.counter }}</td>
+          <td style="white-space:normal;word-break:break-all;max-width:260px">
+            <a href="{{ r.url }}" target="_blank" rel="noopener" style="color:var(--cta-blue);text-decoration:none;font-size:13px">{{ r.url|truncatechars:70 }}</a>
+            <div style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">{{ r.domain }}</div>
+          </td>
+
+          <td style="border-left:1px solid var(--border-subtle);font-variant-numeric:tabular-nums;font-weight:600">{{ r.page_backlinks }}</td>
+          <td style="font-variant-numeric:tabular-nums;font-weight:600">{{ r.page_refdomains }}</td>
+
+          <td style="border-left:1px solid var(--border-subtle);font-variant-numeric:tabular-nums;font-weight:600">{{ r.domain_backlinks }}</td>
+          <td style="font-variant-numeric:tabular-nums;font-weight:600">{{ r.domain_refdomains }}</td>
+
+          <td>
+            {% if r.page_status == "success" and r.domain_status == "success" %}
+              <span class="pill pill-yes">ok</span>
+            {% elif r.page_status == "error" or r.domain_status == "error" %}
+              <span class="pill pill-no">error</span>
+            {% else %}
+              <span class="badge">partial</span>
+            {% endif %}
+          </td>
+
+          <td style="color:var(--text-muted);font-size:12px">{{ r.page_api_units|add:r.domain_api_units }}</td>
+        </tr>
+
+        {% if r.page_error or r.domain_error %}
+        <tr>
+          <td></td>
+          <td colspan="7" style="font-size:12px;color:var(--danger);padding-top:0;padding-bottom:8px">
+            {% if r.page_error %}page: {{ r.page_error }}{% endif %}
+            {% if r.page_error and r.domain_error %} &nbsp;|&nbsp; {% endif %}
+            {% if r.domain_error %}domain: {{ r.domain_error }}{% endif %}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Top referring domains per URL -->
+{% for r in results %}
+{% if r.top_refdomains_json %}
+<div class="card animate-in" style="margin-bottom:16px">
+  <div class="card-title" style="font-size:13px;margin-bottom:12px">
+    Top referring domains — <span style="color:var(--text-muted);font-weight:400">{{ r.url|truncatechars:60 }}</span>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Referring Domain</th>
+        <th>DR</th>
+        <th>Traffic</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ref in r.top_refdomains_json %}
+      <tr>
+        <td>{{ ref.domain }}</td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600">{{ ref.dr|default:"—" }}</td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600">{{ ref.traffic_domain|default:"—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

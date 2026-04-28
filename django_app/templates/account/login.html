@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block title %}Sign in | Orchestrator{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card center">
+        <div class="badge badge-success">Secure Access</div>
+        <h1>Welcome to Orchestrator</h1>
+        <p>
+            Sign in with your company Google account to continue.
+            Access is granted only to approved users.
+        </p>
+
+        <div class="actions" style="justify-content: center;">
+            <a class="btn btn-primary" href="{% provider_login_url 'google' %}">
+                Continue with Google
+            </a>
+        </div>
+
+        <p class="muted spacer">
+            If your account has not yet been approved, you will be redirected
+            to the access review page after authentication.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied | Orchestrator{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card center">
+        <div class="badge badge-danger">Access Denied</div>
+        <h1>Access is not available</h1>
+        <p>
+            Your account is authenticated, but access to this application has not been granted.
+        </p>
+        <p>
+            If you believe this is a mistake, please contact an administrator.
+        </p>
+
+        <div class="actions" style="justify-content: center;">
+            <a class="btn btn-secondary" href="/accounts/logout/">Log out</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

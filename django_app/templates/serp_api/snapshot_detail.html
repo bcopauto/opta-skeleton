@@ -1,0 +1,267 @@
+{% extends "serp_api/base.html" %}
+{% block title %}Snapshot #{{ snap.id }} – {{ snap.query_text }}{% endblock %}
+
+{% block sidebar_content %}
+<nav style="margin-bottom:16px">
+  <a href="{% url 'serp_api:index' %}" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    New Analysis
+  </a>
+  <a href="{% url 'serp_api:history' %}" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    History
+  </a>
+  <a href="{% url 'ahrefs:ahrefs_index' %}" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    Ahrefs
+  </a>
+</nav>
+
+<div style="border-top:1px solid var(--border-subtle);padding-top:16px">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Snapshot Summary</div>
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Keyword</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ snap.query_text }}</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Market</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ snap.keyword.market }}</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Language</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ snap.keyword.language }}</div>
+    </div>
+  </div>
+
+  {% if diff_score %}
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Difficulty Score</div>
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <div style="font-size:18px;font-weight:700;color:{{ diff_meta.color|default:'var(--cta-blue)' }}">{{ diff_score.difficulty_score|floatformat:0 }}</div>
+      {% if diff_meta %}
+      <div style="font-size:12px;font-weight:600;color:{{ diff_meta.color }}">{{ diff_meta.label }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Date</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ snap.snapshot_at|date:"Y-m-d H:i" }}</div>
+  </div>
+
+  <div style="margin-bottom:16px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">HTTP Status</div>
+    <span class="http-status {% if snap.status == "Success" %}ok{% else %}err{% endif %}">{{ snap.status }}</span>
+  </div>
+
+  {% if parse_job %}
+  <div style="border-top:1px solid var(--border-subtle);padding-top:14px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Parse Job</div>
+    <span class="status-badge status-{{ parse_job.status }}">{{ parse_job.get_status_display }}</span>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+      <a href="{% url 'parsing:job_detail' parse_job.id %}" class="btn btn-outline btn-sm" style="justify-content:center">
+        Scraped Pages &nbsp;<span class="status-dot status-{{ parse_job.status }}" title="{{ parse_job.get_status_display }}"></span>
+      </a>
+      {% if snap.target_url and parse_job.status != "running" and parse_job.status != "pending" %}
+      <a href="{% url 'parsing:comparison' parse_job.id %}" class="btn btn-sm" style="justify-content:center">Compare</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card animate-in" style="margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+    <div>
+      <div class="card-title" style="margin-bottom:6px">{{ snap.query_text }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="font-size:12px;color:var(--text-muted);background:rgba(10,18,25,0.4);border:1px solid var(--border-subtle);border-radius:6px;padding:3px 9px">{{ snap.keyword.market }} / {{ snap.keyword.language }}</span>
+        <span style="font-size:12px;color:var(--text-muted);background:rgba(10,18,25,0.4);border:1px solid var(--border-subtle);border-radius:6px;padding:3px 9px">{{ snap.snapshot_at|date:"Y-m-d H:i" }}</span>
+        <span class="http-status {% if snap.status == "Success" %}ok{% else %}err{% endif %}">HTTP {{ snap.status }}</span>
+        <span style="font-size:12px;color:var(--text-muted)">Snapshot #{{ snap.id }}</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+      <a href="{% url 'serp_api:index' %}" class="btn btn-outline btn-sm">← New Search</a>
+    </div>
+  </div>
+
+  {% if features %}
+  <div class="badges mt-12">
+    {% for label in features %}
+    <span class="badge">{{ label }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<div class="serp-split">
+
+  <!-- Left: SERP HTML iframe -->
+  <div class="serp-split-left">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="origin-header">SERP Preview</div>
+      {% if has_html %}
+      <iframe
+        src="{% url 'serp_api:snapshot_html' snap.id %}"
+        title="SERP snapshot"
+        sandbox="allow-scripts"
+        loading="lazy"
+        style="height:860px;background:#fff">
+      </iframe>
+      {% else %}
+      <div class="alert alert-error" style="margin:16px;border-radius:var(--radius)">No HTML snapshot stored for this result.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Right: organic results -->
+  <div class="serp-split-right">
+    <div class="card" style="padding:0;overflow:hidden;max-height:900px;display:flex;flex-direction:column">
+      <div class="origin-header" style="position:sticky;top:0;z-index:1">Organic Results</div>
+      {% if results %}
+      <ol class="results-list" style="overflow-y:auto;flex:1">
+        {% for r in results %}
+        <li class="result-item">
+          <div class="result-title">
+            <a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.title|default:r.url }}</a>
+          </div>
+          <div class="result-url">{{ r.url|truncatechars:80 }}</div>
+          {% if r.description %}
+          <div class="result-snippet">{{ r.description|truncatechars:160 }}</div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="muted" style="padding:16px">No organic results stored.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+{% if paa %}
+<div class="card mt-16">
+  <div class="origin-header" style="margin:-24px -24px 16px;border-radius:var(--radius-xl) var(--radius-xl) 0 0">People Also Ask</div>
+  <div class="paa-list">
+    {% for item in paa %}
+    <div class="paa-item">
+      <div class="paa-question">{{ item.question }}</div>
+      {% if item.snippet %}
+      <div class="paa-snippet">{{ item.snippet }}</div>
+      {% endif %}
+      {% if item.title or item.link %}
+      <div class="paa-source">
+        {% if item.link %}
+        <a href="{{ item.link }}" target="_blank" rel="noopener">{{ item.title|default:item.displayed_link|default:item.link|truncatechars:80 }}</a>
+        {% else %}
+        <span>{{ item.title }}</span>
+        {% endif %}
+        {% if item.date %}<span class="muted"> · {{ item.date }}</span>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<style>
+  .serp-split {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 16px;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: result-counter;
+  }
+  .result-item {
+    counter-increment: result-counter;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(42,63,85,0.3);
+    position: relative;
+    padding-left: 44px;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-item::before {
+    content: counter(result-counter);
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    width: 18px;
+    text-align: right;
+    font-family: var(--mono);
+  }
+  .result-title a {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cta-blue);
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+  }
+  .result-title a:hover { color: var(--cta-blue-hover); text-decoration: underline; }
+  .result-url {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    word-break: break-all;
+    font-family: var(--mono);
+  }
+  .result-snippet {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .paa-list { padding: 0; }
+  .paa-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(42,63,85,0.3);
+  }
+  .paa-item:last-child { border-bottom: none; }
+  .paa-question {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .paa-snippet {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .paa-source {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .paa-source a {
+    color: var(--cta-blue);
+    text-decoration: none;
+  }
+  .paa-source a:hover { color: var(--cta-blue-hover); text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .serp-split { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Access Pending | Orchestrator{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card center">
+        <div class="badge badge-warning">Pending Approval</div>
+        <h1>Your access is under review</h1>
+        <p>
+            You have successfully authenticated, but your account has not yet been approved
+            for access to this application.
+        </p>
+        <p>
+            Please wait until an administrator reviews your request.
+        </p>
+
+        <div class="actions" style="justify-content: center;">
+            <a class="btn btn-secondary" href="/accounts/logout/">Log out</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

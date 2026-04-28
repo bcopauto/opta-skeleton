@@ -1,0 +1,92 @@
+{% extends "serp_api/base.html" %}
+{% block title %}New Analysis{% endblock %}
+
+{% block sidebar_content %}
+<form method="post" id="searchForm">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="form-label" for="{{ form.target_url.id_for_label }}">Page URL</label>
+    {{ form.target_url }}
+    {% if form.target_url.errors %}<span style="color:var(--danger);font-size:12px">{{ form.target_url.errors.0 }}</span>{% endif %}
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="{{ form.keyword.id_for_label }}">Target Keyword</label>
+    {{ form.keyword }}
+    {% if form.keyword.errors %}<span style="color:var(--danger);font-size:12px">{{ form.keyword.errors.0 }}</span>{% endif %}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="form-group">
+      <label class="form-label" for="{{ form.market.id_for_label }}">Country</label>
+      {{ form.market }}
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="{{ form.language.id_for_label }}">Language</label>
+      {{ form.language }}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="{{ form.num.id_for_label }}">Results</label>
+    {{ form.num }}
+  </div>
+  <button class="btn" type="submit" id="submitBtn" style="width:100%;margin-top:4px;justify-content:center">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    Analyze SERP
+  </button>
+</form>
+
+<nav style="margin-top:24px;border-top:1px solid var(--border-subtle);padding-top:16px">
+  <a href="" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    History
+  </a>
+  <a href="" class="sidebar-nav-item">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    Ahrefs
+  </a>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="alert alert-error animate-in">{{ error }}</div>
+{% endif %}
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;text-align:center;gap:20px;position:relative;z-index:1">
+  <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--bc-green),var(--cta-blue));border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(0,168,104,0.2)">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+  </div>
+  <h1 style="font-size:32px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff 30%,var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">SERP Optimization Tool</h1>
+  <p style="color:var(--text-secondary);font-size:15px;max-width:480px;line-height:1.7">Analyze any page against its SERP competitors. Get scored, actionable recommendations to improve your rankings.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:560px;margin-top:12px">
+    <div class="card animate-in" style="text-align:center;padding:20px 16px">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--bc-green)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:8px"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <span style="font-size:22px;font-weight:800;color:var(--bc-green);display:block;margin-bottom:4px">8</span>
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary)">Analysis Modules</div>
+    </div>
+    <div class="card animate-in" style="text-align:center;padding:20px 16px">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--bc-green)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:8px"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      <span style="font-size:22px;font-weight:800;color:var(--bc-green);display:block;margin-bottom:4px">10</span>
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary)">SERP Competitors</div>
+    </div>
+    <div class="card animate-in" style="text-align:center;padding:20px 16px">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--bc-green)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:8px"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77"/></svg>
+      <span style="font-size:22px;font-weight:800;color:var(--bc-green);display:block;margin-bottom:4px">AI</span>
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary)">GPT-4o Analysis</div>
+    </div>
+  </div>
+  <div style="color:var(--text-muted);font-size:12px;margin-top:8px;display:flex;align-items:center;gap:6px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Enter a URL and keyword in the sidebar to start
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.getElementById('searchForm').addEventListener('submit', function() {
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Fetching…';
+  });
+</script>
+{% endblock %}

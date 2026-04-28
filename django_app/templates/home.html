@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Orchestrator{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="card wide-card">
+        <div class="topbar">
+            <div>
+                <div class="topbar-title">Orchestrator</div>
+                <div class="topbar-user">
+                    Signed in as {{ request.user.email }}
+                </div>
+            </div>
+            <div class="actions" style="margin-top: 0;">
+                <a class="btn btn-secondary" href="/accounts/logout/">Log out</a>
+            </div>
+        </div>
+
+        <div class="badge badge-success">Access Approved</div>
+        <h1>Main application area</h1>
+        <p>
+            This is the main internal page of your application.
+            Later, this page can host your forms, job runners, reports, and service controls.
+        </p>
+
+        <div class="grid">
+            <div class="panel">
+                <h3>Jobs</h3>
+                <p>Run and monitor orchestrated tasks across services.</p>
+            </div>
+            <div class="panel">
+                <h3>Results</h3>
+                <p>Inspect processed outputs, metrics, and generated reports.</p>
+            </div>
+            <div class="panel">
+                <h3>Access Control</h3>
+                <p>Users are allowed into this area only after approval.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

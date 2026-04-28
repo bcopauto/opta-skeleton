@@ -1,0 +1,80 @@
+{% extends "ahrefs/base.html" %}
+{% block ahrefs_title %}Ahrefs Backlinks – New Run{% endblock %}
+
+{% block ahrefs_content %}
+
+{% if error %}
+<div class="alert alert-error animate-in">{{ error }}</div>
+{% endif %}
+
+<div class="card animate-in" style="margin-bottom:16px">
+  <div style="font-size:12px;color:var(--text-muted);background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:10px 14px">
+    <strong style="color:var(--text-secondary)">Quality filters applied to all calls:</strong>
+    <span style="color:var(--text-muted)"> Domain Rating ≥ 20 &nbsp;·&nbsp; Referring domain organic traffic ≥ 500 &nbsp;·&nbsp; External links on referring page ≤ 100</span>
+  </div>
+</div>
+
+<!-- Option A: Snapshot ID -->
+<div class="card animate-in" style="margin-bottom:16px">
+  <div class="card-title" style="margin-bottom:14px">From SERP Snapshot</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+    Provide the ID of a snapshot from the <strong style="color:var(--text-secondary)">serp_api</strong> module.
+    The top 10 organic results will be fetched automatically.
+  </p>
+  <form method="post" id="snapshotForm">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="snapshot">
+    <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label" for="{{ snapshot_form.snapshot_id.id_for_label }}">Snapshot ID</label>
+        {{ snapshot_form.snapshot_id }}
+        {% if snapshot_form.snapshot_id.errors %}
+          <span style="color:var(--danger);font-size:12px">{{ snapshot_form.snapshot_id.errors.0 }}</span>
+        {% endif %}
+      </div>
+      <button class="btn" type="submit" id="snapshotBtn">Run Analysis</button>
+    </div>
+  </form>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-muted);font-size:12px">
+  <div style="flex:1;height:1px;background:var(--border-subtle)"></div>
+  or enter URLs manually
+  <div style="flex:1;height:1px;background:var(--border-subtle)"></div>
+</div>
+
+<!-- Option B: Manual URLs -->
+<div class="card animate-in">
+  <div class="card-title" style="margin-bottom:14px">Manual URL List</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+    Paste up to 50 URLs, one per line. Useful when serp_api is not available.
+  </p>
+  <form method="post" id="urlsForm">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="urls">
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label" for="{{ urls_form.urls.id_for_label }}">URLs</label>
+      {{ urls_form.urls }}
+      {% if urls_form.urls.errors %}
+        <span style="color:var(--danger);font-size:12px">{{ urls_form.urls.errors.0 }}</span>
+      {% endif %}
+    </div>
+    <button class="btn" type="submit" id="urlsBtn">Run Analysis</button>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block ahrefs_scripts %}
+<script>
+  function lockForm(formId, btnId) {
+    document.getElementById(formId).addEventListener('submit', function() {
+      var btn = document.getElementById(btnId);
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Running…';
+    });
+  }
+  lockForm('snapshotForm', 'snapshotBtn');
+  lockForm('urlsForm',     'urlsBtn');
+</script>
+{% endblock %}

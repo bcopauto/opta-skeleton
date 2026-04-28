@@ -1,0 +1,56 @@
+{% extends "ahrefs/base.html" %}
+{% block ahrefs_title %}Ahrefs Backlinks – History{% endblock %}
+
+{% block ahrefs_content %}
+
+<div class="card animate-in" style="margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="card-title" style="margin-bottom:0">Backlink Runs</div>
+    <a href="{% url 'ahrefs:ahrefs_index' %}" class="btn btn-sm">+ New Run</a>
+  </div>
+</div>
+
+<div class="card animate-in" style="padding:0;overflow:hidden">
+  {% if runs %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Started</th>
+        <th>Snapshot</th>
+        <th>URLs</th>
+        <th>Status</th>
+        <th>API Units</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for run in runs %}
+      <tr>
+        <td style="color:var(--text-muted)">#{{ run.id }}</td>
+        <td>{{ run.requested_at|date:"Y-m-d H:i" }}</td>
+        <td style="color:var(--text-muted)">
+          {% if run.serp_snapshot_id %}#{{ run.serp_snapshot_id }}{% else %}<span class="muted">—</span>{% endif %}
+        </td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600">{{ run.results.count }}</td>
+        <td>
+          <span class="status-badge status-{% if run.status == 'success' %}done{% elif run.status == 'error' %}error{% else %}running{% endif %}">
+            {{ run.status }}
+          </span>
+        </td>
+        <td style="font-variant-numeric:tabular-nums;color:var(--text-muted)">{{ run.api_units_total }}</td>
+        <td>
+          <a href="{% url 'ahrefs:ahrefs_run_detail' run.id %}" class="btn btn-outline btn-sm">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted" style="padding:24px;text-align:center">
+    No runs yet. <a href="{% url 'ahrefs:ahrefs_index' %}" style="color:var(--cta-blue)">Run your first analysis →</a>
+  </p>
+  {% endif %}
+</div>
+
+{% endblock %}
